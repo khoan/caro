@@ -1,0 +1,56 @@
+#!/usr/bin/env ruby
+
+module Gomoku
+  module Bowl
+    def self.stone
+      gap = 100
+      stop = 1600
+
+      x = 200
+      loop do
+
+        y = 200
+        loop do
+          puts '<circle cx="%s" cy="%s" r="30" />' % [x, y]
+          y += gap
+          break if y > stop
+        end
+
+        x += gap
+        break if x > stop
+      end
+    end
+  end
+
+  module Board
+    module Line
+      def self.horizontal
+        line = 200
+        gap = 100
+        stop = 1600
+
+        loop do
+          puts '<line class="tachi-mori" x1="200" y1="%s" x2="1600" y2="%s" />' % [line, line]
+          line += gap
+          break if line > stop
+        end
+      end
+
+      def self.vertical
+        line = 200
+        gap = 100
+        stop = 1600
+
+        loop do
+          puts '<line x1="%s" y1="200" x2="%s" y2="1600" />' % [line, line]
+          line += gap
+          break if line > stop
+        end
+      end
+    end
+  end
+end
+
+#Gomoku::Board::Line.horizontal
+#Gomoku::Board::Line.vertical
+Gomoku::Bowl.stone

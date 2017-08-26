@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Caro - Gomoku</title>
+</head>
+<body>
+  <svg id="board" viewBox="0 0 1800 1800" version="1.1">
+    <style>
+    <![CDATA[
+      #board {
+        display: block;
+        margin: 0 auto;
+        width: 60vw;
+        background-color: #e0c428;
+      }
+      .tachi-mori-horizontal,
+      .tachi-mori-vertical {
+        stroke: #222;
+        stroke-width: 1;
+        fill: none;
+        shape-rendering: crispEdges; // https://stackoverflow.com/questions/23376308/avoiding-lines-between-adjecent-svg-rectangles#comment56203656_23376793
+      }
+      .stone {
+        stroke-width: 0;
+        fill: transparent;
+      }
+    ]]>
+    </style>
+
+    <g class="tachi-mori-horizontal">
+      <line x1="200" y1="200" x2="1600" y2="200" />
+      <line x1="200" y1="300" x2="1600" y2="300" />
+      <line x1="200" y1="400" x2="1600" y2="400" />
+      <line x1="200" y1="500" x2="1600" y2="500" />
+      <line x1="200" y1="600" x2="1600" y2="600" />
+      <line x1="200" y1="700" x2="1600" y2="700" />
+      <line x1="200" y1="800" x2="1600" y2="800" />
+      <line x1="200" y1="900" x2="1600" y2="900" />
+      <line x1="200" y1="1000" x2="1600" y2="1000" />
+      <line x1="200" y1="1100" x2="1600" y2="1100" />
+      <line x1="200" y1="1200" x2="1600" y2="1200" />
+      <line x1="200" y1="1300" x2="1600" y2="1300" />
+      <line x1="200" y1="1400" x2="1600" y2="1400" />
+      <line x1="200" y1="1500" x2="1600" y2="1500" />
+      <line x1="200" y1="1600" x2="1600" y2="1600" />
+    </g>
+
+    <g class="tachi-mori-vertical">
+      <line x1="200" y1="200" x2="200" y2="1600" />
+      <line x1="300" y1="200" x2="300" y2="1600" />
+      <line x1="400" y1="200" x2="400" y2="1600" />
+      <line x1="500" y1="200" x2="500" y2="1600" />
+      <line x1="600" y1="200" x2="600" y2="1600" />
+      <line x1="700" y1="200" x2="700" y2="1600" />
+      <line x1="800" y1="200" x2="800" y2="1600" />
+      <line x1="900" y1="200" x2="900" y2="1600" />
+      <line x1="1000" y1="200" x2="1000" y2="1600" />
+      <line x1="1100" y1="200" x2="1100" y2="1600" />
+      <line x1="1200" y1="200" x2="1200" y2="1600" />
+      <line x1="1300" y1="200" x2="1300" y2="1600" />
+      <line x1="1400" y1="200" x2="1400" y2="1600" />
+      <line x1="1500" y1="200" x2="1500" y2="1600" />
+      <line x1="1600" y1="200" x2="1600" y2="1600" />
+    </g>
+
+    <g class="stone">
+      <circle cx="200" cy="200" r="30" />
+      <circle cx="200" cy="300" r="30" />
+      <circle cx="200" cy="400" r="30" />
+      <circle cx="200" cy="500" r="30" />
+      <circle cx="200" cy="600" r="30" />
+      <circle cx="200" cy="700" r="30" />
+      <circle cx="200" cy="800" r="30" />
+      <circle cx="200" cy="900" r="30" />
+      <circle cx="200" cy="1000" r="30" />
+      <circle cx="200" cy="1100" r="30" />
+      <circle cx="200" cy="1200" r="30" />
+      <circle cx="200" cy="1300" r="30" />
+      <circle cx="200" cy="1400" r="30" />
+      <circle cx="200" cy="1500" r="30" />
+      <circle cx="200" cy="1600" r="30" />
+      <circle cx="300" cy="200" r="30" />
+      <circle cx="300" cy="300" r="30" />
+      <circle cx="300" cy="400" r="30" />
+      <circle cx="300" cy="500" r="30" />
+      <circle cx="300" cy="600" r="30" />
+      <circle cx="300" cy="700" r="30" />
+      <circle cx="300" cy="800" r="30" />
+      <circle cx="300" cy="900" r="30" />
+      <circle cx="300" cy="1000" r="30" />
+      <circle cx="300" cy="1100" r="30" />
+      <circle cx="300" cy="1200" r="30" />
+      <circle cx="300" cy="1300" r="30" />
+      <circle cx="300" cy="1400" r="30" />
+      <circle cx="300" cy="1500" r="30" />
+      <circle cx="300" cy="1600" r="30" />
+      <circle cx="400" cy="200" r="30" />
+      <circle cx="400" cy="300" r="30" />
+      <circle cx="400" cy="400" r="30" />
+      <circle cx="400" cy="500" r="30" />
+      <circle cx="400" cy="600" r="30" />
+      <circle cx="400" cy="700" r="30" />
+      <circle cx="400" cy="800" r="30" />
+      <circle cx="400" cy="900" r="30" />
+      <circle cx="400" cy="1000" r="30" />
+      <circle cx="400" cy="1100" r="30" />
+      <circle cx="400" cy="1200" r="30" />
+      <circle cx="400" cy="1300" r="30" />
+      <circle cx="400" cy="1400" r="30" />
+      <circle cx="400" cy="1500" r="30" />
+      <circle cx="400" cy="1600" r="30" />
+      <circle cx="500" cy="200" r="30" />
+      <circle cx="500" cy="300" r="30" />
+      <circle cx="500" cy="400" r="30" />
+      <circle cx="500" cy="500" r="30" />
+      <circle cx="500" cy="600" r="30" />
+      <circle cx="500" cy="700" r="30" />
+      <circle cx="500" cy="800" r="30" />
+      <circle cx="500" cy="900" r="30" />
+      <circle cx="500" cy="1000" r="30" />
+      <circle cx="500" cy="1100" r="30" />
+      <circle cx="500" cy="1200" r="30" />
+      <circle cx="500" cy="1300" r="30" />
+      <circle cx="500" cy="1400" r="30" />
+      <circle cx="500" cy="1500" r="30" />
+      <circle cx="500" cy="1600" r="30" />
+      <circle cx="600" cy="200" r="30" />
+      <circle cx="600" cy="300" r="30" />
+      <circle cx="600" cy="400" r="30" />
+      <circle cx="600" cy="500" r="30" />
+      <circle cx="600" cy="600" r="30" />
+      <circle cx="600" cy="700" r="30" />
+      <circle cx="600" cy="800" r="30" />
+      <circle cx="600" cy="900" r="30" />
+      <circle cx="600" cy="1000" r="30" />
+      <circle cx="600" cy="1100" r="30" />
+      <circle cx="600" cy="1200" r="30" />
+      <circle cx="600" cy="1300" r="30" />
+      <circle cx="600" cy="1400" r="30" />
+      <circle cx="600" cy="1500" r="30" />
+      <circle cx="600" cy="1600" r="30" />
+      <circle cx="700" cy="200" r="30" />
+      <circle cx="700" cy="300" r="30" />
+      <circle cx="700" cy="400" r="30" />
+      <circle cx="700" cy="500" r="30" />
+      <circle cx="700" cy="600" r="30" />
+      <circle cx="700" cy="700" r="30" />
+      <circle cx="700" cy="800" r="30" />
+      <circle cx="700" cy="900" r="30" />
+      <circle cx="700" cy="1000" r="30" />
+      <circle cx="700" cy="1100" r="30" />
+      <circle cx="700" cy="1200" r="30" />
+      <circle cx="700" cy="1300" r="30" />
+      <circle cx="700" cy="1400" r="30" />
+      <circle cx="700" cy="1500" r="30" />
+      <circle cx="700" cy="1600" r="30" />
+      <circle cx="800" cy="200" r="30" />
+      <circle cx="800" cy="300" r="30" />
+      <circle cx="800" cy="400" r="30" />
+      <circle cx="800" cy="500" r="30" />
+      <circle cx="800" cy="600" r="30" />
+      <circle cx="800" cy="700" r="30" />
+      <circle cx="800" cy="800" r="30" />
+      <circle cx="800" cy="900" r="30" />
+      <circle cx="800" cy="1000" r="30" />
+      <circle cx="800" cy="1100" r="30" />
+      <circle cx="800" cy="1200" r="30" />
+      <circle cx="800" cy="1300" r="30" />
+      <circle cx="800" cy="1400" r="30" />
+      <circle cx="800" cy="1500" r="30" />
+      <circle cx="800" cy="1600" r="30" />
+      <circle cx="900" cy="200" r="30" />
+      <circle cx="900" cy="300" r="30" />
+      <circle cx="900" cy="400" r="30" />
+      <circle cx="900" cy="500" r="30" />
+      <circle cx="900" cy="600" r="30" />
+      <circle cx="900" cy="700" r="30" />
+      <circle cx="900" cy="800" r="30" />
+      <circle cx="900" cy="900" r="30" />
+      <circle cx="900" cy="1000" r="30" />
+      <circle cx="900" cy="1100" r="30" />
+      <circle cx="900" cy="1200" r="30" />
+      <circle cx="900" cy="1300" r="30" />
+      <circle cx="900" cy="1400" r="30" />
+      <circle cx="900" cy="1500" r="30" />
+      <circle cx="900" cy="1600" r="30" />
+      <circle cx="1000" cy="200" r="30" />
+      <circle cx="1000" cy="300" r="30" />
+      <circle cx="1000" cy="400" r="30" />
+      <circle cx="1000" cy="500" r="30" />
+      <circle cx="1000" cy="600" r="30" />
+      <circle cx="1000" cy="700" r="30" />
+      <circle cx="1000" cy="800" r="30" />
+      <circle cx="1000" cy="900" r="30" />
+      <circle cx="1000" cy="1000" r="30" />
+      <circle cx="1000" cy="1100" r="30" />
+      <circle cx="1000" cy="1200" r="30" />
+      <circle cx="1000" cy="1300" r="30" />
+      <circle cx="1000" cy="1400" r="30" />
+      <circle cx="1000" cy="1500" r="30" />
+      <circle cx="1000" cy="1600" r="30" />
+      <circle cx="1100" cy="200" r="30" />
+      <circle cx="1100" cy="300" r="30" />
+      <circle cx="1100" cy="400" r="30" />
+      <circle cx="1100" cy="500" r="30" />
+      <circle cx="1100" cy="600" r="30" />
+      <circle cx="1100" cy="700" r="30" />
+      <circle cx="1100" cy="800" r="30" />
+      <circle cx="1100" cy="900" r="30" />
+      <circle cx="1100" cy="1000" r="30" />
+      <circle cx="1100" cy="1100" r="30" />
+      <circle cx="1100" cy="1200" r="30" />
+      <circle cx="1100" cy="1300" r="30" />
+      <circle cx="1100" cy="1400" r="30" />
+      <circle cx="1100" cy="1500" r="30" />
+      <circle cx="1100" cy="1600" r="30" />
+      <circle cx="1200" cy="200" r="30" />
+      <circle cx="1200" cy="300" r="30" />
+      <circle cx="1200" cy="400" r="30" />
+      <circle cx="1200" cy="500" r="30" />
+      <circle cx="1200" cy="600" r="30" />
+      <circle cx="1200" cy="700" r="30" />
+      <circle cx="1200" cy="800" r="30" />
+      <circle cx="1200" cy="900" r="30" />
+      <circle cx="1200" cy="1000" r="30" />
+      <circle cx="1200" cy="1100" r="30" />
+      <circle cx="1200" cy="1200" r="30" />
+      <circle cx="1200" cy="1300" r="30" />
+      <circle cx="1200" cy="1400" r="30" />
+      <circle cx="1200" cy="1500" r="30" />
+      <circle cx="1200" cy="1600" r="30" />
+      <circle cx="1300" cy="200" r="30" />
+      <circle cx="1300" cy="300" r="30" />
+      <circle cx="1300" cy="400" r="30" />
+      <circle cx="1300" cy="500" r="30" />
+      <circle cx="1300" cy="600" r="30" />
+      <circle cx="1300" cy="700" r="30" />
+      <circle cx="1300" cy="800" r="30" />
+      <circle cx="1300" cy="900" r="30" />
+      <circle cx="1300" cy="1000" r="30" />
+      <circle cx="1300" cy="1100" r="30" />
+      <circle cx="1300" cy="1200" r="30" />
+      <circle cx="1300" cy="1300" r="30" />
+      <circle cx="1300" cy="1400" r="30" />
+      <circle cx="1300" cy="1500" r="30" />
+      <circle cx="1300" cy="1600" r="30" />
+      <circle cx="1400" cy="200" r="30" />
+      <circle cx="1400" cy="300" r="30" />
+      <circle cx="1400" cy="400" r="30" />
+      <circle cx="1400" cy="500" r="30" />
+      <circle cx="1400" cy="600" r="30" />
+      <circle cx="1400" cy="700" r="30" />
+      <circle cx="1400" cy="800" r="30" />
+      <circle cx="1400" cy="900" r="30" />
+      <circle cx="1400" cy="1000" r="30" />
+      <circle cx="1400" cy="1100" r="30" />
+      <circle cx="1400" cy="1200" r="30" />
+      <circle cx="1400" cy="1300" r="30" />
+      <circle cx="1400" cy="1400" r="30" />
+      <circle cx="1400" cy="1500" r="30" />
+      <circle cx="1400" cy="1600" r="30" />
+      <circle cx="1500" cy="200" r="30" />
+      <circle cx="1500" cy="300" r="30" />
+      <circle cx="1500" cy="400" r="30" />
+      <circle cx="1500" cy="500" r="30" />
+      <circle cx="1500" cy="600" r="30" />
+      <circle cx="1500" cy="700" r="30" />
+      <circle cx="1500" cy="800" r="30" />
+      <circle cx="1500" cy="900" r="30" />
+      <circle cx="1500" cy="1000" r="30" />
+      <circle cx="1500" cy="1100" r="30" />
+      <circle cx="1500" cy="1200" r="30" />
+      <circle cx="1500" cy="1300" r="30" />
+      <circle cx="1500" cy="1400" r="30" />
+      <circle cx="1500" cy="1500" r="30" />
+      <circle cx="1500" cy="1600" r="30" />
+      <circle cx="1600" cy="200" r="30" />
+      <circle cx="1600" cy="300" r="30" />
+      <circle cx="1600" cy="400" r="30" />
+      <circle cx="1600" cy="500" r="30" />
+      <circle cx="1600" cy="600" r="30" />
+      <circle cx="1600" cy="700" r="30" />
+      <circle cx="1600" cy="800" r="30" />
+      <circle cx="1600" cy="900" r="30" />
+      <circle cx="1600" cy="1000" r="30" />
+      <circle cx="1600" cy="1100" r="30" />
+      <circle cx="1600" cy="1200" r="30" />
+      <circle cx="1600" cy="1300" r="30" />
+      <circle cx="1600" cy="1400" r="30" />
+      <circle cx="1600" cy="1500" r="30" />
+      <circle cx="1600" cy="1600" r="30" />
+    </g>
+  </svg>
+
+  <script>
+document.addEventListener("click", function(e) {
+  if (e.target.matches(".stone circle")) {
+  }
+});
+  </script>
+</body>
+</html>
