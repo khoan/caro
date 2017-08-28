@@ -5,6 +5,9 @@
   <title>Caro - Gomoku</title>
 </head>
 <body>
+  <a href="#" onclick="reset(event)">New Game</a>
+  <span class="announcement"></span>
+
   <svg id="board" viewBox="0 0 1800 1800" version="1.1">
     <style>
     <![CDATA[
@@ -14,8 +17,7 @@
         width: 60vw;
         background-color: #e0c428;
       }
-      .tachi-mori-horizontal,
-      .tachi-mori-vertical {
+      .tachi-mori {
         stroke: #222;
         stroke-width: 1;
         fill: none;
@@ -25,10 +27,16 @@
         stroke-width: 0;
         fill: transparent;
       }
+      .stone [data-on="b"] {
+        fill: #000;
+      }
+      .stone [data-on="w"] {
+        fill: #efefef;
+      }
     ]]>
     </style>
 
-    <g class="tachi-mori-horizontal">
+    <g class="tachi-mori horizontal">
       <line x1="200" y1="200" x2="1600" y2="200" />
       <line x1="200" y1="300" x2="1600" y2="300" />
       <line x1="200" y1="400" x2="1600" y2="400" />
@@ -46,7 +54,7 @@
       <line x1="200" y1="1600" x2="1600" y2="1600" />
     </g>
 
-    <g class="tachi-mori-vertical">
+    <g class="tachi-mori vertical">
       <line x1="200" y1="200" x2="200" y2="1600" />
       <line x1="300" y1="200" x2="300" y2="1600" />
       <line x1="400" y1="200" x2="400" y2="1600" />
@@ -294,10 +302,152 @@
   </svg>
 
   <script>
-document.addEventListener("click", function(e) {
-  if (e.target.matches(".stone circle")) {
+  function Game() {
+    this.board = new Board;
+  };
+
+  function Board() {
+    this.winner = {
+      name: undefined
+    };
+
+    this.grid = [
+      ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
+      ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
+      ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
+      ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
+      ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
+      ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
+      ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
+      ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
+      ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
+      ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
+      ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
+      ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
+      ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
+      ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
+      ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.']
+    ];
   }
-});
+  Board.prototype = {
+    place: function(stone, x, y) {
+      var gameover, win, i, j;
+
+      if (stone === 'b') {
+        win = 'bbbbb';
+      } else {
+        win = 'wwwww';
+      }
+
+      i = x - 1;
+      j = y - 1;
+
+      this.grid[i][j] = stone;
+
+      gameover = this.row(i).indexOf(win) !== -1 ||
+        this.column(j).indexOf(win) !== -1 ||
+          this.diagonalF(i, j).indexOf(win) !== -1 ||
+            this.diagonalB(i, j).indexOf(win) !== -1;
+
+      if (gameover) {
+        this.winner.name = stone === 'b' ? 'Black' : 'White';
+      }
+
+      return this.winner.name;
+    },
+    row: function(i) {
+      return this.grid[i].join('');
+    },
+    column: function(j) {
+      var i, result = '';
+
+      for (i=0; i < 15; ++i) {
+        result = result + this.grid[i][j];
+      }
+
+      return result;
+    },
+    diagonalF: function(i, j) {
+      var k, l;
+      var result = this.grid[i][j];
+
+      for (k=i+1, l=j-1; k < 15 && -1 < l; ++k, --l) {
+        result = this.grid[k][l] + result;
+      }
+
+      for (k=i-1, l=j+1; -1 < k && l < 15; --k, ++l) {
+        result = result + this.grid[k][l];
+      }
+
+      return result;
+    },
+    diagonalB: function(i, j) {
+      var k, l;
+      var result = this.grid[i][j];
+
+      for (k=i-1, l=j-1; -1 < k && -1 < l; --k, --l) {
+        result = this.grid[k][l] + result;
+      }
+
+      for (k=i+1, l=j+1; k < 15 && l < 15; ++k, ++l) {
+        result = result + this.grid[k][l];
+      }
+
+      return result;
+    }
+  };
+
+  var game, turn;
+  var stone = "bw";
+
+  function reset(e) {
+    var stones = document.querySelectorAll(".stone [data-on]");
+    var i;
+    for (i=0; i < stones.length; ++i) {
+      delete stones[i].dataset["on"];
+    }
+
+    document.querySelector(".announcement").innerHTML = "";
+
+    game = new Game;
+    turn = 0;
+
+    //document.removeEventListener("click", move);
+    document.addEventListener("click", move);
+
+    e.preventDefault();
+  }
+
+  function move(e) {
+    var ok = e.target.matches(".stone circle") && ! e.target.dataset.on;
+    var winner;
+
+    if (ok) {
+      e.target.dataset.on = stone.charAt(turn);
+
+      winner = game.board.place(
+        stone.charAt(turn),
+        e.target.cx.animVal.value/100-1,
+        e.target.cy.animVal.value/100-1
+      );
+
+      if (winner) {
+        document.querySelector(".announcement").innerHTML = `${winner} wins`;
+        document.removeEventListener("click", move);
+
+        // wait for next tick
+        //setTimeout(function() {
+        //  alert(`${winner} wins`);
+        //  document.removeEventListener("click", move);
+        //}, 100);
+
+      } else {
+        turn = (turn + 1) % 2;
+      }
+    }
+  }
+
+  reset();
   </script>
 </body>
 </html>
